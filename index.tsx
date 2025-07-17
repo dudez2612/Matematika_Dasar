@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 // --- TYPE DEFINITIONS ---
@@ -42,8 +42,8 @@ const Button: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({ child
 // --- SCREEN COMPONENTS ---
 
 const SetupScreen = ({ onStart }: { onStart: (players: Player[]) => void }) => {
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [playerName, setPlayerName] = useState('');
+    const [players, setPlayers] = React.useState<Player[]>([]);
+    const [playerName, setPlayerName] = React.useState('');
 
     const handleAddPlayer = () => {
         if (playerName.trim() && players.length < 5) {
@@ -122,13 +122,13 @@ const GameScreen = ({ player, gameType, level, onEndTurn }: {
     level: number;
     onEndTurn: (score: number) => void;
 }) => {
-    const [question, setQuestion] = useState<Question | null>(null);
-    const [answer, setAnswer] = useState('');
-    const [score, setScore] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
-    const [isTimerActive, setIsTimerActive] = useState(false);
+    const [question, setQuestion] = React.useState<Question | null>(null);
+    const [answer, setAnswer] = React.useState('');
+    const [score, setScore] = React.useState(0);
+    const [timeLeft, setTimeLeft] = React.useState(GAME_DURATION);
+    const [isTimerActive, setIsTimerActive] = React.useState(false);
 
-    const generateQuestion = useCallback(() => {
+    const generateQuestion = React.useCallback(() => {
         const range = LEVEL_RANGES[level];
         let num1 = getRandomInt(range.min, range.max);
         let num2 = getRandomInt(range.min2 || range.min, range.max2 || range.max);
@@ -155,11 +155,11 @@ const GameScreen = ({ player, gameType, level, onEndTurn }: {
         setAnswer('');
     }, [gameType, level]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         generateQuestion();
     }, [generateQuestion]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (!isTimerActive || timeLeft <= 0) return;
         const timerId = setInterval(() => {
             setTimeLeft(prev => prev - 1);
@@ -169,7 +169,7 @@ const GameScreen = ({ player, gameType, level, onEndTurn }: {
 
 
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (timeLeft === 0) {
             onEndTurn(score);
         }
@@ -244,11 +244,11 @@ const ResultsScreen = ({ players, onPlayAgain, onReset }: {
 // --- MAIN APP COMPONENT ---
 
 const App = () => {
-    const [view, setView] = useState<GameView>('setup');
-    const [players, setPlayers] = useState<Player[]>([]);
-    const [gameType, setGameType] = useState<GameType | null>(null);
-    const [level, setLevel] = useState<number | null>(null);
-    const [currentPlayerIndex, setCurrentPlayerIndex] = useState(0);
+    const [view, setView] = React.useState<GameView>('setup');
+    const [players, setPlayers] = React.useState<Player[]>([]);
+    const [gameType, setGameType] = React.useState<GameType | null>(null);
+    const [level, setLevel] = React.useState<number | null>(null);
+    const [currentPlayerIndex, setCurrentPlayerIndex] = React.useState(0);
 
     const handleStart = (initialPlayers: Player[]) => {
         setPlayers(initialPlayers.map(p => ({...p, score: 0 }))); // Reset scores on new game
